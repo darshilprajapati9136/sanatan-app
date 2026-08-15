@@ -21,7 +21,7 @@ function App() {
       </div>
 
       {/* Header */}
-      <header className="container mx-auto px-6 py-6 flex justify-between items-center z-10">
+      <header className="container mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-4 z-10">
         <div className="flex items-center gap-3">
           {/* Spiritual Symbol / SVG Icon */}
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-orange-500 flex items-center justify-center shadow-lg shadow-orange-900/30">
@@ -32,7 +32,7 @@ function App() {
           </span>
         </div>
         <div>
-          <span className="text-xs font-semibold uppercase tracking-widest text-amber-500/80 bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-500/20">
+          <span className="text-xs font-semibold uppercase tracking-widest text-amber-500/80 bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/20 whitespace-nowrap">
             Devotional Experience
           </span>
         </div>
