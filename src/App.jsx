@@ -265,6 +265,27 @@ function App() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Rahu Kaal Detail */}
+                  <div className="relative p-5 rounded-2xl bg-gradient-to-r from-neutral-950/60 to-neutral-950/20 border border-neutral-800/40">
+                    <div className="absolute right-4 top-4 text-xs font-semibold uppercase tracking-wider text-red-500/80 bg-red-500/10 px-2.5 py-0.5 rounded border border-red-500/25">
+                      Rahu Kaal
+                    </div>
+                    <div className="flex items-start gap-4">
+                      <div className="text-2xl mt-1">🌑</div>
+                      <div className="space-y-1">
+                        <h3 className="font-serif text-lg font-bold text-amber-100">
+                          Rahu Kaal
+                        </h3>
+                        <p className="text-xs text-neutral-400">
+                          Period: <span className="text-amber-200/90">{formatTime(panchangData.data.rahuKalamStart)}</span> to <span className="text-amber-200/90">{formatTime(panchangData.data.rahuKalamEnd)}</span>
+                        </p>
+                        <p className="text-[10px] text-neutral-500 leading-relaxed">
+                          Inauspicious time window. Avoid starting new projects or major tasks during this period.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Metadata Limbs Footer */}
