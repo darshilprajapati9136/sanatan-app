@@ -1,10 +1,42 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { getPanchangam, Observer } from '@ishubhamx/panchangam-js';
+import { supabase } from './supabaseClient';
+
+const SAMPLE_MANTRAS = [
+  {
+    title: "Gayatri Mantra",
+    sanskrit_text: "ॐ भूर्भुवः स्वः तत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि धियो यो नः प्रचोदयात्॥",
+    transliteration: "Om bhūr bhuvaḥ svaḥ tat savitur vareṇyaṃ bhargo devasya dhīmahi dhiyo yo naḥ pracodayāt.",
+    meaning: "We meditate on the absolute splendour of the supreme source, who illuminates all realms (physical, mental, and spiritual). May that divine light inspire and guide our intellect.",
+    category: "Gayatri"
+  },
+  {
+    title: "Maha Mrityunjaya Mantra",
+    sanskrit_text: "ॐ त्र्यम्बकम् यजामहे सुगन्धिम् पुष्टिवर्धनम्। उर्वारुकमिव बन्धनान् मृत्योर्मुक्षीय मामृतात्॥",
+    transliteration: "Om tryambakaṃ yajāmahe sugandhiṃ puṣṭi-vardhanam, urvārukam-iva bandhanān mṛtyor-mukṣīya mā'mṛtāt.",
+    meaning: "We worship the three-eyed Lord Shiva, who is fragrant and nourishes all beings. Just as a ripe cucumber is freed from its bondage to the vine, may he liberate us from death and guide us to immortality.",
+    category: "Shiva"
+  },
+  {
+    title: "Ganesha Mantra",
+    sanskrit_text: "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+    transliteration: "Vakratunda mahākāya sūryakoṭi samaprabha, nirvighnaṃ kuru me deva sarva-kāryeṣu sarvadā.",
+    meaning: "O Lord of the curved trunk and massive body, whose brilliance is equal to millions of suns, please make all my endeavors free from obstacles, always.",
+    category: "Ganesha"
+  }
+];
 
 function App() {
-  const [page, setPage] = useState('home'); // 'home' | 'panchang'
+  const [page, setPage] = useState('home'); // 'home' | 'panchang' | 'mantras'
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+
+  // Mantras state
+  const [mantras, setMantras] = useState([]);
+  const [loadingMantras, setLoadingMantras] = useState(true);
+  const [mantrasError, setMantrasError] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [seeding, setSeeding] = useState(false);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -13,6 +45,61 @@ function App() {
       setEmail('');
     }
   };
+
+  // Fetch mantras when page switches to 'mantras'
+  useEffect(() => {
+    if (page !== 'mantras') return;
+    fetchMantrasList();
+  }, [page]);
+
+  async function fetchMantrasList() {
+    setLoadingMantras(true);
+    setMantrasError(null);
+    try {
+      const { data, error } = await supabase
+        .from('mantras')
+        .select('*')
+        .order('id', { ascending: true });
+      
+      if (error) throw error;
+      setMantras(data || []);
+    } catch (err) {
+      console.error("Error fetching mantras:", err);
+      setMantrasError(err.message || "Failed to load mantras.");
+    } finally {
+      setLoadingMantras(false);
+    }
+  }
+
+  // Helper function to seed sample data if database is empty
+  async function seedDatabase() {
+    setSeeding(true);
+    try {
+      const { error } = await supabase
+        .from('mantras')
+        .insert(SAMPLE_MANTRAS);
+      
+      if (error) throw error;
+      await fetchMantrasList();
+    } catch (err) {
+      console.error("Error seeding database:", err);
+      alert("Seeding failed: " + err.message);
+    } finally {
+      setSeeding(false);
+    }
+  }
+
+  // Get unique categories for filtering
+  const categories = useMemo(() => {
+    const list = new Set(mantras.map(m => m.category));
+    return ['All', ...Array.from(list)];
+  }, [mantras]);
+
+  // Filtered mantras
+  const filteredMantras = useMemo(() => {
+    if (selectedCategory === 'All') return mantras;
+    return mantras.filter(m => m.category === selectedCategory);
+  }, [mantras, selectedCategory]);
 
   // Panchang calculations for Mumbai (Lat: 19.0760, Lon: 72.8777)
   const panchangData = useMemo(() => {
@@ -61,10 +148,10 @@ function App() {
         </div>
         
         {/* Navigation */}
-        <nav className="flex gap-2 bg-neutral-900/50 p-1 rounded-xl border border-neutral-800/80 backdrop-blur-md">
+        <nav className="flex gap-1 bg-neutral-900/50 p-1 rounded-xl border border-neutral-800/80 backdrop-blur-md">
           <button 
             onClick={() => setPage('home')}
-            className={`text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-lg transition-all duration-300 cursor-pointer ${
+            className={`text-xs font-semibold uppercase tracking-wider px-3.5 py-2 rounded-lg transition-all duration-300 cursor-pointer ${
               page === 'home' 
                 ? 'text-amber-400 bg-amber-500/10 border border-amber-500/25 shadow-sm' 
                 : 'text-neutral-400 hover:text-amber-300 border border-transparent'
@@ -74,13 +161,23 @@ function App() {
           </button>
           <button 
             onClick={() => setPage('panchang')}
-            className={`text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-lg transition-all duration-300 cursor-pointer ${
+            className={`text-xs font-semibold uppercase tracking-wider px-3.5 py-2 rounded-lg transition-all duration-300 cursor-pointer ${
               page === 'panchang' 
                 ? 'text-amber-400 bg-amber-500/10 border border-amber-500/25 shadow-sm' 
                 : 'text-neutral-400 hover:text-amber-300 border border-transparent'
             }`}
           >
             Panchang
+          </button>
+          <button 
+            onClick={() => setPage('mantras')}
+            className={`text-xs font-semibold uppercase tracking-wider px-3.5 py-2 rounded-lg transition-all duration-300 cursor-pointer ${
+              page === 'mantras' 
+                ? 'text-amber-400 bg-amber-500/10 border border-amber-500/25 shadow-sm' 
+                : 'text-neutral-400 hover:text-amber-300 border border-transparent'
+            }`}
+          >
+            Mantras
           </button>
         </nav>
       </header>
@@ -139,12 +236,12 @@ function App() {
 
           {/* App Highlights / Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-3xl mt-4">
-            <div className="p-6 rounded-2xl bg-neutral-900/40 border border-neutral-900 hover:border-amber-500/20 transition-all duration-300 backdrop-blur-sm group">
+            <div className="p-6 rounded-2xl bg-neutral-900/40 border border-neutral-900 hover:border-amber-500/20 transition-all duration-300 backdrop-blur-sm group cursor-pointer" onClick={() => setPage('mantras')}>
               <div className="text-2xl mb-2 text-amber-500 group-hover:scale-110 transition-transform duration-300">📖</div>
               <h3 className="font-semibold text-amber-200/90 mb-1">Sacred Wisdom</h3>
               <p className="text-xs text-neutral-500">Access Gita, Vedas, and Upanishads with English translations & commentaries.</p>
             </div>
-            <div className="p-6 rounded-2xl bg-neutral-900/40 border border-neutral-900 hover:border-amber-500/20 transition-all duration-300 backdrop-blur-sm group">
+            <div className="p-6 rounded-2xl bg-neutral-900/40 border border-neutral-900 hover:border-amber-500/20 transition-all duration-300 backdrop-blur-sm group cursor-pointer" onClick={() => setPage('panchang')}>
               <div className="text-2xl mb-2 text-amber-500 group-hover:scale-110 transition-transform duration-300">📅</div>
               <h3 className="font-semibold text-amber-200/90 mb-1">Vedic Calendar</h3>
               <p className="text-xs text-neutral-500">Track auspicious times, festivals, Panchang, and daily shloka reminders.</p>
@@ -156,7 +253,7 @@ function App() {
             </div>
           </div>
         </main>
-      ) : (
+      ) : page === 'panchang' ? (
         <main className="container mx-auto px-6 py-12 flex-grow flex flex-col items-center justify-center z-10 max-w-3xl">
           {/* Page Title */}
           <div className="text-center mb-8">
@@ -208,7 +305,7 @@ function App() {
                   </div>
                 </div>
 
-                {/* Primary Elements: Tithi and Nakshatra */}
+                {/* Primary Elements: Tithi, Nakshatra, Rahu Kaal */}
                 <div className="space-y-6">
                   {/* Tithi Detail */}
                   <div className="relative p-5 rounded-2xl bg-gradient-to-r from-neutral-950/60 to-neutral-950/20 border border-neutral-800/40">
@@ -319,6 +416,125 @@ function App() {
           ) : (
             <div className="p-8 rounded-2xl bg-neutral-900 border border-neutral-800 text-center text-amber-400">
               ⚠️ Failed to load Panchang calculations.
+            </div>
+          )}
+        </main>
+      ) : (
+        /* Mantras Page View */
+        <main className="container mx-auto px-6 py-12 flex-grow flex flex-col items-center justify-start z-10 max-w-4xl">
+          {/* Page Title */}
+          <div className="text-center mb-8">
+            <span className="text-xs font-semibold uppercase tracking-widest text-amber-500 bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/20">
+              Sacred Chants
+            </span>
+            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-wide mt-3 mb-2 bg-gradient-to-r from-amber-100 to-orange-300 bg-clip-text text-transparent">
+              Vedic Mantras
+            </h1>
+            <p className="text-neutral-400 text-sm">
+              Discover and meditate upon timeless spiritual chants
+            </p>
+          </div>
+
+          {/* Error State */}
+          {mantrasError && (
+            <div className="w-full p-4 mb-6 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm text-center">
+              ⚠️ {mantrasError}
+            </div>
+          )}
+
+          {/* Loader */}
+          {loadingMantras ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
+              <p className="text-xs text-neutral-500 uppercase tracking-widest">Connecting to Temple Database...</p>
+            </div>
+          ) : (
+            <div className="w-full">
+              {mantras.length === 0 ? (
+                /* Empty Database State */
+                <div className="p-8 rounded-3xl bg-neutral-900/40 border border-neutral-900 text-center backdrop-blur-sm max-w-lg mx-auto">
+                  <span className="text-4xl block mb-4">📖</span>
+                  <h3 className="text-lg font-semibold text-amber-200/90 mb-2">No Mantras Found</h3>
+                  <p className="text-sm text-neutral-400 mb-6 leading-relaxed">
+                    Your database table <code className="bg-neutral-950 px-2 py-1 rounded">mantras</code> is currently empty or loading credentials. You can seed some beautiful default Vedic mantras immediately.
+                  </p>
+                  <button
+                    onClick={seedDatabase}
+                    disabled={seeding}
+                    className="px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-500 hover:to-orange-400 text-neutral-950 font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 cursor-pointer shadow-lg shadow-orange-950/20"
+                  >
+                    {seeding ? "Seeding database..." : "✨ Seed Sample Mantras"}
+                  </button>
+                </div>
+              ) : (
+                /* Main list view with categories */
+                <div className="space-y-6">
+                  {/* Category Filter Tabs */}
+                  <div className="flex flex-wrap gap-2 justify-center pb-4 border-b border-neutral-900/60">
+                    {categories.map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => setSelectedCategory(cat)}
+                        className={`text-xs font-semibold px-4 py-2 rounded-xl border transition-all duration-300 cursor-pointer ${
+                          selectedCategory === cat
+                            ? 'text-amber-400 bg-amber-500/10 border-amber-500/30'
+                            : 'text-neutral-500 border-neutral-800 hover:text-amber-200 hover:border-neutral-700'
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Mantras List */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {filteredMantras.map((mantra) => (
+                      <div
+                        key={mantra.id}
+                        className="p-6 rounded-3xl bg-neutral-900/40 border border-neutral-900 hover:border-amber-500/15 transition-all duration-300 backdrop-blur-sm flex flex-col justify-between group relative overflow-hidden"
+                      >
+                        {/* Soft corner gradient on hover */}
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/2 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        
+                        <div className="space-y-4">
+                          {/* Title & Category */}
+                          <div className="flex justify-between items-start gap-4">
+                            <h3 className="font-serif text-lg font-bold text-amber-200 group-hover:text-amber-100 transition-colors duration-300">
+                              {mantra.title}
+                            </h3>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-500 bg-amber-500/5 border border-amber-500/10 px-2.5 py-0.5 rounded-full">
+                              {mantra.category}
+                            </span>
+                          </div>
+
+                          {/* Sanskrit Text */}
+                          <div className="p-4 rounded-2xl bg-neutral-950/60 border border-neutral-900 text-center py-6 leading-relaxed">
+                            <p className="font-serif text-xl font-bold bg-gradient-to-b from-amber-200 to-orange-300 bg-clip-text text-transparent leading-loose tracking-wide">
+                              {mantra.sanskrit_text}
+                            </p>
+                          </div>
+
+                          {/* Phonetic Transliteration */}
+                          <div className="space-y-1">
+                            <span className="text-[9px] uppercase font-bold tracking-widest text-neutral-500 block">Pronunciation</span>
+                            <p className="text-xs text-neutral-300/80 italic font-light leading-relaxed">
+                              {mantra.transliteration}
+                            </p>
+                          </div>
+
+                          {/* Meaning */}
+                          <div className="space-y-1">
+                            <span className="text-[9px] uppercase font-bold tracking-widest text-neutral-500 block">Meaning</span>
+                            <p className="text-xs text-neutral-400 leading-relaxed font-light">
+                              {mantra.meaning}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </main>
