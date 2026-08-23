@@ -288,19 +288,19 @@ function App() {
                 </div>
 
                 {/* Sunrise/Sunset Widget */}
-                <div className="grid grid-cols-2 gap-4 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                   <div className="p-4 rounded-2xl bg-neutral-950/50 border border-neutral-800/40 flex items-center gap-4">
-                    <div className="text-3xl">🌅</div>
+                    <div className="text-3xl select-none">🌅</div>
                     <div>
                       <span className="text-[10px] uppercase font-bold tracking-widest text-neutral-500 block">Sunrise</span>
-                      <span className="text-base font-semibold text-amber-300">{formatTime(panchangData.data.sunrise)}</span>
+                      <span className="text-base font-semibold text-amber-300 whitespace-nowrap">{formatTime(panchangData.data.sunrise)}</span>
                     </div>
                   </div>
                   <div className="p-4 rounded-2xl bg-neutral-950/50 border border-neutral-800/40 flex items-center gap-4">
-                    <div className="text-3xl">🌇</div>
+                    <div className="text-3xl select-none">🌇</div>
                     <div>
                       <span className="text-[10px] uppercase font-bold tracking-widest text-neutral-500 block">Sunset</span>
-                      <span className="text-base font-semibold text-amber-300">{formatTime(panchangData.data.sunset)}</span>
+                      <span className="text-base font-semibold text-amber-300 whitespace-nowrap">{formatTime(panchangData.data.sunset)}</span>
                     </div>
                   </div>
                 </div>
@@ -308,79 +308,87 @@ function App() {
                 {/* Primary Elements: Tithi, Nakshatra, Rahu Kaal */}
                 <div className="space-y-6">
                   {/* Tithi Detail */}
-                  <div className="relative p-5 rounded-2xl bg-gradient-to-r from-neutral-950/60 to-neutral-950/20 border border-neutral-800/40">
-                    <div className="absolute right-4 top-4 text-xs font-semibold uppercase tracking-wider text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/10">
-                      Tithi
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="text-2xl mt-1">🌕</div>
-                      <div className="space-y-1">
-                        {/* Get first tithi details using true start/end times */}
-                        {panchangData.data.tithis && panchangData.data.tithis.length > 0 ? (
-                          <>
-                            <h3 className="font-serif text-lg font-bold text-amber-100">
-                              {panchangData.data.tithis[0].name}
-                            </h3>
-                            <p className="text-xs text-neutral-400">
-                              Starts: <span className="text-amber-200/90">{formatTime(panchangData.data.tithiStartTime)}</span> ({formatShortDate(panchangData.data.tithiStartTime)})
-                            </p>
-                            <p className="text-xs text-neutral-400">
-                              Ends: <span className="text-amber-200/90">{formatTime(panchangData.data.tithiEndTime)}</span> ({formatShortDate(panchangData.data.tithiEndTime)})
-                            </p>
-                          </>
-                        ) : (
-                          <h3 className="font-serif text-lg font-bold text-amber-100">Tithi Index: {panchangData.data.tithi}</h3>
-                        )}
+                  <div className="p-5 rounded-2xl bg-gradient-to-r from-neutral-950/60 to-neutral-950/20 border border-neutral-800/40">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-neutral-800/40 pb-3 mb-3 gap-2">
+                      <div className="flex items-center gap-3">
+                        <div className="text-2xl select-none">🌕</div>
+                        <h3 className="font-serif text-lg font-bold text-amber-100">
+                          {panchangData.data.tithis && panchangData.data.tithis.length > 0 
+                            ? panchangData.data.tithis[0].name 
+                            : `Tithi ${panchangData.data.tithi}`}
+                        </h3>
                       </div>
+                      <span className="self-start sm:self-auto text-[10px] font-bold uppercase tracking-wider text-amber-500 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/25">
+                        Tithi
+                      </span>
+                    </div>
+                    <div className="space-y-1">
+                      {panchangData.data.tithis && panchangData.data.tithis.length > 0 ? (
+                        <>
+                          <p className="text-xs text-neutral-400">
+                            Starts: <span className="text-amber-200/90">{formatTime(panchangData.data.tithiStartTime)}</span> ({formatShortDate(panchangData.data.tithiStartTime)})
+                          </p>
+                          <p className="text-xs text-neutral-400">
+                            Ends: <span className="text-amber-200/90">{formatTime(panchangData.data.tithiEndTime)}</span> ({formatShortDate(panchangData.data.tithiEndTime)})
+                          </p>
+                        </>
+                      ) : (
+                        <p className="text-xs text-neutral-400">No transitions available.</p>
+                      )}
                     </div>
                   </div>
 
                   {/* Nakshatra Detail */}
-                  <div className="relative p-5 rounded-2xl bg-gradient-to-r from-neutral-950/60 to-neutral-950/20 border border-neutral-800/40">
-                    <div className="absolute right-4 top-4 text-xs font-semibold uppercase tracking-wider text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/10">
-                      Nakshatra
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="text-2xl mt-1">✨</div>
-                      <div className="space-y-1">
-                        {/* Get first nakshatra details using true start/end times */}
-                        {panchangData.data.nakshatras && panchangData.data.nakshatras.length > 0 ? (
-                          <>
-                            <h3 className="font-serif text-lg font-bold text-amber-100">
-                              {panchangData.data.nakshatras[0].name}
-                            </h3>
-                            <p className="text-xs text-neutral-400">
-                              Starts: <span className="text-amber-200/90">{formatTime(panchangData.data.nakshatraStartTime)}</span> ({formatShortDate(panchangData.data.nakshatraStartTime)})
-                            </p>
-                            <p className="text-xs text-neutral-400">
-                              Ends: <span className="text-amber-200/90">{formatTime(panchangData.data.nakshatraEndTime)}</span> ({formatShortDate(panchangData.data.nakshatraEndTime)})
-                            </p>
-                          </>
-                        ) : (
-                          <h3 className="font-serif text-lg font-bold text-amber-100">Nakshatra Index: {panchangData.data.nakshatra}</h3>
-                        )}
+                  <div className="p-5 rounded-2xl bg-gradient-to-r from-neutral-950/60 to-neutral-950/20 border border-neutral-800/40">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-neutral-800/40 pb-3 mb-3 gap-2">
+                      <div className="flex items-center gap-3">
+                        <div className="text-2xl select-none">✨</div>
+                        <h3 className="font-serif text-lg font-bold text-amber-100">
+                          {panchangData.data.nakshatras && panchangData.data.nakshatras.length > 0 
+                            ? panchangData.data.nakshatras[0].name 
+                            : `Nakshatra ${panchangData.data.nakshatra}`}
+                        </h3>
                       </div>
+                      <span className="self-start sm:self-auto text-[10px] font-bold uppercase tracking-wider text-amber-500 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/25">
+                        Nakshatra
+                      </span>
+                    </div>
+                    <div className="space-y-1">
+                      {panchangData.data.nakshatras && panchangData.data.nakshatras.length > 0 ? (
+                        <>
+                          <p className="text-xs text-neutral-400">
+                            Starts: <span className="text-amber-200/90">{formatTime(panchangData.data.nakshatraStartTime)}</span> ({formatShortDate(panchangData.data.nakshatraStartTime)})
+                          </p>
+                          <p className="text-xs text-neutral-400">
+                            Ends: <span className="text-amber-200/90">{formatTime(panchangData.data.nakshatraEndTime)}</span> ({formatShortDate(panchangData.data.nakshatraEndTime)})
+                          </p>
+                        </>
+                      ) : (
+                        <p className="text-xs text-neutral-400">No transitions available.</p>
+                      )}
                     </div>
                   </div>
 
                   {/* Rahu Kaal Detail */}
-                  <div className="relative p-5 rounded-2xl bg-gradient-to-r from-neutral-950/60 to-neutral-950/20 border border-neutral-800/40">
-                    <div className="absolute right-4 top-4 text-xs font-semibold uppercase tracking-wider text-red-500/80 bg-red-500/10 px-2.5 py-0.5 rounded border border-red-500/25">
-                      Rahu Kaal
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="text-2xl mt-1">🌑</div>
-                      <div className="space-y-1">
+                  <div className="p-5 rounded-2xl bg-gradient-to-r from-neutral-950/60 to-neutral-950/20 border border-neutral-800/40">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-neutral-800/40 pb-3 mb-3 gap-2">
+                      <div className="flex items-center gap-3">
+                        <div className="text-2xl select-none">🌑</div>
                         <h3 className="font-serif text-lg font-bold text-amber-100">
                           Rahu Kaal
                         </h3>
-                        <p className="text-xs text-neutral-400">
-                          Period: <span className="text-amber-200/90">{formatTime(panchangData.data.rahuKalamStart)}</span> to <span className="text-amber-200/90">{formatTime(panchangData.data.rahuKalamEnd)}</span>
-                        </p>
-                        <p className="text-[10px] text-neutral-500 leading-relaxed">
-                          Inauspicious time window. Avoid starting new projects or major tasks during this period.
-                        </p>
                       </div>
+                      <span className="self-start sm:self-auto text-[10px] font-bold uppercase tracking-wider text-red-500/80 bg-red-500/10 px-2.5 py-0.5 rounded-full border border-red-500/25">
+                        Rahu Kaal
+                      </span>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-neutral-400">
+                        Period: <span className="text-amber-200/90">{formatTime(panchangData.data.rahuKalamStart)}</span> to <span className="text-amber-200/90">{formatTime(panchangData.data.rahuKalamEnd)}</span>
+                      </p>
+                      <p className="text-[10px] text-neutral-500 leading-relaxed pt-1">
+                        Inauspicious time window. Avoid starting new projects or major tasks during this period.
+                      </p>
                     </div>
                   </div>
                 </div>
