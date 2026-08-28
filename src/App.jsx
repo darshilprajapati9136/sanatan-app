@@ -152,6 +152,7 @@ function App() {
   // Japa counter state for Detail View
   const [japaCount, setJapaCount] = useState(0);
   const [japaTarget, setJapaTarget] = useState(108);
+  const [isChantMode, setIsChantMode] = useState(false); // Mobile Full-Screen Focus Chant Mode
   const [toastMessage, setToastMessage] = useState(null);
 
   const handleSubscribe = (e) => {
@@ -168,6 +169,26 @@ function App() {
     setTimeout(() => {
       setToastMessage(null);
     }, 3000);
+  };
+
+  // Tap handler for Japa chanting with mobile haptic vibration
+  const handleChantTap = () => {
+    setJapaCount(prev => {
+      const next = prev + 1;
+      if (next === japaTarget) {
+        showToast(`🎉 Sacred Mala Completed (${japaTarget} Chants)! May you be blessed. 🙏`);
+      }
+      return next;
+    });
+
+    // Mobile haptic feedback (vibration)
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try {
+        navigator.vibrate(40);
+      } catch {
+        // Safe ignore
+      }
+    }
   };
 
   // Fetch mantras when page switches to 'mantras'
@@ -268,6 +289,7 @@ function App() {
   // Open Mantra Detail View
   const handleOpenDetail = (mantra) => {
     setSelectedMantra(mantra);
+    setIsChantMode(false);
     setJapaCount(0); // Reset counter for new mantra
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -275,6 +297,7 @@ function App() {
   // Close Mantra Detail View (Back to library)
   const handleBackToLibrary = () => {
     setSelectedMantra(null);
+    setIsChantMode(false);
     setJapaCount(0);
   };
 
@@ -625,7 +648,125 @@ function App() {
         /* ========================================================================= */
         /* Day 15: Mantra Detail View with Deity Imagery, Sanskrit Shloka & 108 Japa */
         /* ========================================================================= */
-        <main className="container mx-auto px-4 sm:px-6 py-8 flex-grow flex flex-col items-center z-10 max-w-4xl">
+        <main className="container mx-auto px-4 sm:px-6 py-8 flex-grow flex flex-col items-center z-10 max-w-4xl pb-24 sm:pb-8">
+          {/* ========================================================================= */}
+          {/* Full-Screen Focus Chant Mode (Naam Jap Dhyana Overlay)                   */}
+          {/* ========================================================================= */}
+          {isChantMode && (
+            <div className="fixed inset-0 z-50 bg-neutral-950 flex flex-col justify-between p-4 sm:p-8 backdrop-blur-2xl overflow-y-auto">
+              {/* Background ambient lighting */}
+              <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-amber-500/15 rounded-full blur-[100px] pointer-events-none" />
+
+              {/* Chant Mode Header */}
+              <div className="flex items-center justify-between z-10 border-b border-neutral-850 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{selectedMantra.symbol || "🕉️"}</span>
+                  <div>
+                    <h2 className="font-serif text-sm sm:text-base font-bold text-amber-200 line-clamp-1">
+                      {selectedMantra.title}
+                    </h2>
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-amber-500/80">
+                      Naam Jap Mode
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsChantMode(false)}
+                  className="px-3.5 py-1.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-amber-400 hover:text-amber-200 border border-neutral-750 text-xs font-semibold cursor-pointer transition flex items-center gap-1.5"
+                >
+                  <span>✕</span> Exit
+                </button>
+              </div>
+
+              {/* Central Sacred Shloka & Pronunciation Display (Always in view while chanting) */}
+              <div className="my-auto py-6 text-center space-y-5 z-10 max-w-2xl mx-auto w-full">
+                <span className="text-[10px] uppercase tracking-widest text-amber-500/70 font-semibold bg-amber-500/5 px-3 py-1 rounded-full border border-amber-500/15">
+                  ॥ पवित्र श्लोक ॥
+                </span>
+
+                {/* Big Glowing Devanagari Sanskrit */}
+                <p className="font-serif text-2xl sm:text-4xl font-bold bg-gradient-to-r from-amber-100 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-relaxed sm:leading-loose tracking-wide select-none drop-shadow-md">
+                  {selectedMantra.sanskrit_text}
+                </p>
+
+                {/* Syllable Transliteration for Recitation */}
+                <div className="p-3.5 rounded-2xl bg-neutral-900/60 border border-neutral-850 max-w-lg mx-auto">
+                  <p className="text-xs sm:text-sm text-neutral-300 italic font-light leading-relaxed select-none">
+                    "{selectedMantra.transliteration}"
+                  </p>
+                </div>
+              </div>
+
+              {/* Bottom Chanting Disc Controller */}
+              <div className="z-10 flex flex-col items-center gap-4 max-w-md mx-auto w-full pt-2">
+                {/* Repetition Target Selector */}
+                <div className="grid grid-cols-4 gap-1.5 w-full bg-neutral-900/80 p-1.5 rounded-2xl border border-neutral-800">
+                  {[11, 21, 54, 108].map(target => (
+                    <button
+                      key={target}
+                      onClick={() => setJapaTarget(target)}
+                      className={`text-xs font-bold py-1.5 rounded-xl transition cursor-pointer text-center ${
+                        japaTarget === target 
+                          ? 'bg-amber-500 text-neutral-950 shadow-md' 
+                          : 'text-neutral-400 hover:text-amber-300'
+                      }`}
+                    >
+                      {target} Chants
+                    </button>
+                  ))}
+                </div>
+
+                {/* Circular Tap Counter Button */}
+                <button
+                  onClick={handleChantTap}
+                  className={`w-36 h-36 sm:w-44 sm:h-44 rounded-full border-4 transition-all duration-150 active:scale-92 cursor-pointer flex flex-col items-center justify-center shadow-2xl select-none group ${
+                    japaCount >= japaTarget
+                      ? 'border-amber-400 bg-amber-500/25 shadow-amber-500/40 animate-pulse'
+                      : 'border-amber-500/50 bg-neutral-900 hover:border-amber-400 hover:bg-neutral-850 active:border-amber-300'
+                  }`}
+                >
+                  <span className="text-3xl sm:text-4xl font-serif font-bold text-amber-100 group-hover:scale-105 transition-transform">
+                    {japaCount}
+                  </span>
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-amber-400/90 mt-1">
+                    / {japaTarget} Chants
+                  </span>
+                  <span className="text-[9px] text-neutral-400 uppercase tracking-wider mt-1 bg-neutral-950/70 px-2 py-0.5 rounded-full border border-neutral-800">
+                    Tap to Count
+                  </span>
+                </button>
+
+                {/* Linear Progress Bar */}
+                <div className="w-full bg-neutral-900 h-2.5 rounded-full overflow-hidden border border-neutral-800">
+                  <div 
+                    className="h-full bg-gradient-to-r from-amber-500 to-orange-400 transition-all duration-200"
+                    style={{ width: `${Math.min(100, (japaCount / japaTarget) * 100)}%` }}
+                  />
+                </div>
+
+                {/* Mala Complete Banner */}
+                {japaCount >= japaTarget && (
+                  <div className="w-full p-3 rounded-2xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs font-semibold text-center animate-bounce">
+                    🎉 Sacred Mala Completed ({japaTarget} Chants)! Har Har Mahadev 🙏
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between w-full text-xs text-neutral-500 px-2">
+                  <button
+                    onClick={() => setJapaCount(0)}
+                    className="hover:text-neutral-300 underline cursor-pointer"
+                  >
+                    Reset Count
+                  </button>
+                  <span className="text-[11px]">
+                    {Math.round(Math.min(100, (japaCount / japaTarget) * 100))}% Completed
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Breadcrumb & Navigation Bar */}
           <div className="w-full flex items-center justify-between mb-8 pb-4 border-b border-neutral-900">
             <button
@@ -716,6 +857,16 @@ function App() {
               </p>
             </div>
 
+            {/* Prominent CTA to Launch Full-Screen Naam Jap Mode (Crucial for mobile users) */}
+            <button
+              onClick={() => setIsChantMode(true)}
+              className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-neutral-950 font-bold text-sm sm:text-base flex items-center justify-center gap-3 shadow-xl shadow-orange-950/40 hover:scale-[1.01] active:scale-95 transition-all cursor-pointer"
+            >
+              <span className="text-xl">📿</span>
+              <span>Open Naam Jap Mode (Chant & Read Shloka)</span>
+              <span className="text-xs opacity-75 font-normal">→</span>
+            </button>
+
             {/* Pronunciation & Meaning Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Pronunciation Card */}
@@ -740,7 +891,7 @@ function App() {
             </div>
 
             {/* 108 Japa Chanting Mala Counter Tool */}
-            <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-b from-neutral-900/80 to-neutral-950 border border-neutral-800 shadow-2xl backdrop-blur-md flex flex-col items-center text-center relative overflow-hidden">
+            <div className="p-6 sm:p-10 rounded-3xl bg-gradient-to-b from-neutral-900/80 to-neutral-950 border border-neutral-800 shadow-2xl backdrop-blur-md flex flex-col items-center text-center relative overflow-hidden">
               <div className="text-xs font-bold uppercase tracking-widest text-amber-500 bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/20 mb-3">
                 📿 Sacred Japa Counter
               </div>
@@ -751,30 +902,40 @@ function App() {
                 Chant with devotion. Tap the sacred bead counter for each recitation.
               </p>
 
-              {/* Target selector pills */}
-              <div className="flex items-center gap-2 mb-8 bg-neutral-950 p-1.5 rounded-2xl border border-neutral-850">
+              {/* Mobile-Friendly Grid Target selector (Responsive 4 columns, no overflow) */}
+              <div className="grid grid-cols-4 gap-1.5 sm:gap-2 w-full max-w-sm mx-auto mb-6 bg-neutral-950 p-1.5 rounded-2xl border border-neutral-850">
                 {[11, 21, 54, 108].map(target => (
                   <button
                     key={target}
-                    onClick={() => { setJapaTarget(target); }}
-                    className={`text-xs font-bold px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
+                    onClick={() => setJapaTarget(target)}
+                    className={`text-xs font-bold py-2 px-1 rounded-xl transition-all cursor-pointer text-center ${
                       japaTarget === target 
-                        ? 'bg-amber-500 text-neutral-950 shadow-md shadow-amber-500/20' 
+                        ? 'bg-amber-500 text-neutral-950 shadow-md shadow-amber-500/20 font-extrabold' 
                         : 'text-neutral-400 hover:text-amber-300'
                     }`}
                   >
-                    {target} Repetitions
+                    {target}
                   </button>
                 ))}
               </div>
 
-              {/* Big Circular Counter Button */}
+              {/* In-Card Shloka Reminder for Chanting */}
+              <div className="w-full max-w-md p-3.5 mb-6 rounded-2xl bg-neutral-950/70 border border-neutral-850 text-center">
+                <p className="font-serif text-sm sm:text-base font-bold text-amber-200 line-clamp-2">
+                  {selectedMantra.sanskrit_text}
+                </p>
+                <p className="text-[11px] text-neutral-400 italic mt-1 line-clamp-1">
+                  {selectedMantra.transliteration}
+                </p>
+              </div>
+
+              {/* Big Circular Counter Button with Haptics */}
               <div className="relative mb-6">
                 <button
-                  onClick={() => setJapaCount(prev => prev + 1)}
+                  onClick={handleChantTap}
                   className={`w-36 h-36 sm:w-44 sm:h-44 rounded-full border-4 transition-all duration-200 active:scale-95 cursor-pointer flex flex-col items-center justify-center shadow-2xl group ${
                     japaCount >= japaTarget
-                      ? 'border-amber-400 bg-amber-500/20 shadow-amber-500/30'
+                      ? 'border-amber-400 bg-amber-500/20 shadow-amber-500/30 animate-pulse'
                       : 'border-amber-500/40 bg-neutral-950 hover:border-amber-400 hover:bg-neutral-900'
                   }`}
                 >
@@ -798,21 +959,57 @@ function App() {
                 />
               </div>
 
-              {/* Mala Complete message or Reset */}
-              {japaCount >= japaTarget ? (
+              {/* Mala Complete message */}
+              {japaCount >= japaTarget && (
                 <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/40 text-amber-300 text-sm font-semibold animate-pulse mb-4">
                   🎉 Sacred Mala Completed ({japaTarget} Chants)! May you be blessed with peace and harmony. 🙏
                 </div>
-              ) : null}
+              )}
 
-              <button
-                onClick={() => setJapaCount(0)}
-                className="text-xs text-neutral-500 hover:text-neutral-300 underline cursor-pointer"
-              >
-                Reset Japa Counter
-              </button>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setJapaCount(0)}
+                  className="text-xs text-neutral-500 hover:text-neutral-300 underline cursor-pointer"
+                >
+                  Reset Japa Counter
+                </button>
+                <span className="text-neutral-700">•</span>
+                <button
+                  onClick={() => setIsChantMode(true)}
+                  className="text-xs text-amber-400 hover:text-amber-300 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <span>📿</span> Full-Screen Chant Mode
+                </button>
+              </div>
             </div>
           </div>
+
+          {/* Floating Mobile Bottom Quick-Chant Bar */}
+          {!isChantMode && (
+            <div className="fixed bottom-0 left-0 right-0 p-3.5 bg-neutral-950/95 border-t border-neutral-800/80 backdrop-blur-xl flex items-center justify-between sm:hidden z-30 px-5 shadow-2xl">
+              <div className="flex items-center gap-2.5">
+                <button
+                  onClick={handleChantTap}
+                  className="w-10 h-10 rounded-full bg-amber-500 text-neutral-950 font-bold text-sm flex items-center justify-center shadow-lg active:scale-90 transition-transform cursor-pointer"
+                >
+                  +1
+                </button>
+                <div>
+                  <span className="text-xs font-bold text-amber-200 block">
+                    {japaCount} / {japaTarget} Chants
+                  </span>
+                  <span className="text-[10px] text-neutral-500 block">Tap +1 or open focus</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setIsChantMode(true)}
+                className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-neutral-950 font-bold text-xs rounded-xl shadow-md cursor-pointer flex items-center gap-1.5"
+              >
+                <span>📿</span> Focus Chant
+              </button>
+            </div>
+          )}
         </main>
       ) : (
         /* ========================================================================= */
