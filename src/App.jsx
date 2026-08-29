@@ -9,7 +9,7 @@ const SAMPLE_MANTRAS = [
     deity: "Goddess Gayatri / Savitr",
     category: "Gayatri",
     symbol: "☀️",
-    image_url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+    image_url: "/images/gayatri.jpg",
     sanskrit_text: "ॐ भूर्भुवः स्वः तत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि धियो यो नः प्रचोदयात्॥",
     transliteration: "Om bhūr bhuvaḥ svaḥ tat savitur vareṇyaṃ bhargo devasya dhīmahi dhiyo yo naḥ pracodayāt.",
     meaning: "We meditate on the absolute splendour of the supreme divine sun (Savitr), who illuminates all realms (physical, mental, and spiritual). May that divine light inspire and awaken our intellect.",
@@ -22,7 +22,7 @@ const SAMPLE_MANTRAS = [
     deity: "Lord Shiva (Tryambaka)",
     category: "Shiva",
     symbol: "🔱",
-    image_url: "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80",
+    image_url: "/images/shiva.jpg",
     sanskrit_text: "ॐ त्र्यम्बकम् यजामहे सुगन्धिम् पुष्टिवर्धनम्। उर्वारुकमिव बन्धनान् मृत्योर्मुक्षीय मामृतात्॥",
     transliteration: "Om tryambakaṃ yajāmahe sugandhiṃ puṣṭi-vardhanam, urvārukam-iva bandhanān mṛtyor-mukṣīya mā'mṛtāt.",
     meaning: "We worship the three-eyed Lord Shiva, who is fragrant and nourishes all beings. Just as a ripe cucumber effortlessly detaches from its bondage to the vine, may he liberate us from the cycle of death and guide us to immortality.",
@@ -35,7 +35,7 @@ const SAMPLE_MANTRAS = [
     deity: "Lord Ganesha",
     category: "Ganesha",
     symbol: "🐘",
-    image_url: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80",
+    image_url: "/images/ganesha.jpg",
     sanskrit_text: "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
     transliteration: "Vakratuṇḍa mahākāya sūryakoṭi samaprabha, nirvighnaṃ kuru me deva sarva-kāryeṣu sarvadā.",
     meaning: "O Lord of the curved trunk and immense cosmic form, whose brilliance equals millions of suns: please remove all obstacles from all my endeavors, always.",
@@ -48,7 +48,7 @@ const SAMPLE_MANTRAS = [
     deity: "Lord Shiva (Na-Ma-Shi-Va-Ya)",
     category: "Shiva",
     symbol: "🕉️",
-    image_url: "https://images.unsplash.com/photo-1545128485-c400e7702796?auto=format&fit=crop&w=800&q=80",
+    image_url: "/images/shiva.jpg",
     sanskrit_text: "नागेन्द्रहाराय त्रिलोचनाय भस्माङ्गरागाय महेश्वराय। नित्याय शुद्धाय दिगम्बराय तस्मै नकाराय नमः शिवाय॥",
     transliteration: "Nāgendrahārāya trilocanāya bhasmāṅgarāgāya maheśvarāya, nityāya śuddhāya digambarāya tasmai 'na'kārāya namaḥ śivāya.",
     meaning: "Salutations to Lord Shiva, who wears the king of serpents as a garland, who has three divine eyes, whose body is smeared with sacred ash, the supreme lord of the universe, eternal, pure, and clothed in the cosmos — salutations to the syllable 'NA'.",
@@ -61,7 +61,7 @@ const SAMPLE_MANTRAS = [
     deity: "Lord Hanuman",
     category: "Hanuman",
     symbol: "🚩",
-    image_url: "https://images.unsplash.com/photo-1609342122563-a43ac8917a3a?auto=format&fit=crop&w=800&q=80",
+    image_url: "/images/hanuman.jpg",
     sanskrit_text: "श्रीगुरु चरन सरोज रज निज मनु मुकुरु सुधारि। बरनउँ रघुबर बिमल जसु जो दायकु फल चारि॥ बुद्धिहीन तनु जानिके सुमिरौं पवन कुमार। बल बुधि बिद्या देहु मोहिं हरहु कलेस बिकार॥",
     transliteration: "Śrī guru carana saroja raja, nija manu mukuru sudhāri; baranaũ raghubara bimala jasu, jo dāyaku phala cāri. Buddhihīna tanu jānike, sumiraũ pavana-kumāra; bala budhi bidyā dehu mohi, harahu kalesa bikāra.",
     meaning: "Purifying the mirror of my mind with the sacred dust from the lotus feet of the Guru, I describe the pure glory of Lord Ram, which grants the four fruits of life. Knowing myself to be deficient in wisdom, I meditate on the son of the Wind God — grant me strength, wisdom, and knowledge, and dispel my afflictions.",
@@ -74,7 +74,7 @@ const SAMPLE_MANTRAS = [
     deity: "Goddess Mahalakshmi",
     category: "Lakshmi",
     symbol: "🪷",
-    image_url: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=800&q=80",
+    image_url: "/images/lakshmi.jpg",
     sanskrit_text: "नमस्तेऽस्तु महामाये श्रीपीठे सुरपूजिते। शङ्खचक्रगदाहस्ते महालक्ष्मि नमोऽस्तु ते॥",
     transliteration: "Namaste'stu mahāmāye śrīpīṭhe surapūjite, śaṅkha-cakra-gadā-haste mahālakṣmi namo'stu te.",
     meaning: "Salutations to You, O Great Divine Mother, supreme enchantress who abides in the holy Sri Pitha, worshipped by all celestial beings. Holder of the conch, discus, and mace — salutations unto You, O Mahalakshmi!",
@@ -87,7 +87,7 @@ const SAMPLE_MANTRAS = [
     deity: "Lord Krishna & Radha",
     category: "Krishna",
     symbol: "🪈",
-    image_url: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+    image_url: "/images/krishna.jpg",
     sanskrit_text: "हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे। हरे राम हरे राम राम राम हरे हरे॥",
     transliteration: "Hare kṛṣṇa hare kṛṣṇa kṛṣṇa kṛṣṇa hare hare, hare rāma hare rāma rāma rāma hare hare.",
     meaning: "O supreme energy of the Lord (Hare), O all-attractive Supreme Lord (Krishna), O supreme reservoir of divine pleasure (Rama): please engage me in Your devotional service.",
@@ -100,7 +100,7 @@ const SAMPLE_MANTRAS = [
     deity: "Lord Vishnu",
     category: "Vishnu",
     symbol: "🐚",
-    image_url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+    image_url: "/images/vishnu.jpg",
     sanskrit_text: "शुक्लांबरधरं विष्णुं शशिवर्णं चतुर्भुजम्। प्रसन्नवदनं ध्यायेत् सर्वविघ्नोपशान्तये॥",
     transliteration: "Śuklāmbaradharaṃ viṣṇuṃ śaśivarṇaṃ caturbhujam, prasannavadanaṃ dhyāyet sarvavighnopaśāntaye.",
     meaning: "We meditate upon Lord Vishnu, dressed in luminous white garments, radiant as the glowing moon, having four divine arms and a serene, blissful countenance — for the pacification and removal of all obstacles.",
@@ -113,7 +113,7 @@ const SAMPLE_MANTRAS = [
     deity: "Goddess Saraswati",
     category: "Saraswati",
     symbol: "🪕",
-    image_url: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=800&q=80",
+    image_url: "/images/saraswati.jpg",
     sanskrit_text: "या कुन्देन्दुतुषारहारधवला या शुभ्रवस्त्रावृता या वीणावरदण्डमण्डितकरा या श्वेतपद्मासना। सा मां पातु सरस्वती भगवती निःशेषजाड्यापहा॥",
     transliteration: "Yā kundendu-tuṣāra-hāra-dhavalā yā śubhra-vastrāvṛtā, yā vīṇā-vara-daṇḍa-maṇḍita-karā yā śveta-padmāsanā, sā māṃ pātu sarasvatī bhagavatī niḥśeṣa-jāḍyāpahā.",
     meaning: "May Goddess Saraswati, radiant as the white jasmine, moon, and snow, adorned in spotless white robes, whose hands grace the Veena, seated upon a pure white lotus and revered by Brahma, Vishnu, and Shiva — protect us and completely dispel all ignorance and lethargy.",
@@ -126,7 +126,7 @@ const SAMPLE_MANTRAS = [
     deity: "Universal Divine / Guru-Shishya",
     category: "Shanti",
     symbol: "🕊️",
-    image_url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    image_url: "/images/shanti.png",
     sanskrit_text: "ॐ सह नाववतु। सह नौ भुनक्तु। सह वीर्यं करवावहै। तेजस्वि नावधीतमस्तु मा विद्विषावहै। ॐ शान्तिः शान्तिः शान्तिः॥",
     transliteration: "Om saha nāvavatu, saha nau bhunaktu, saha vīryaṃ karavāvahai, tejasvi nāvadhītamastu mā vidviṣāvahai. Om śāntiḥ śāntiḥ śāntiḥ.",
     meaning: "May the Divine protect teacher and disciple together. May He nourish us together. May we work together with great vigor and zeal. May our study be brilliant and enlightened. May there never be discord between us. Om Peace, Peace, Peace.",
@@ -344,64 +344,78 @@ function App() {
         </div>
       )}
 
-      {/* Header */}
-      <header className="container mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row justify-between items-center gap-4 z-10">
-        <div 
-          onClick={() => { setPage('home'); setSelectedMantra(null); }}
-          className="flex items-center gap-3 cursor-pointer group"
-        >
-          {/* Spiritual Symbol / SVG Icon */}
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-orange-500 flex items-center justify-center shadow-lg shadow-orange-900/30 group-hover:scale-105 transition-transform duration-300">
-            <span className="font-serif text-xl font-bold text-neutral-950">ॐ</span>
+      {/* ===== HEADER — sticky compact row: logo left, nav right ===== */}
+      <header className="sticky top-0 z-40 w-full bg-neutral-950/90 backdrop-blur-xl border-b border-neutral-900/80 shadow-md">
+        <div className="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center max-w-5xl">
+          {/* Logo */}
+          <div
+            onClick={() => { setPage('home'); setSelectedMantra(null); setIsChantMode(false); }}
+            className="flex items-center gap-2.5 cursor-pointer group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-600 to-orange-500 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300 shrink-0">
+              <span className="font-serif text-base font-bold text-neutral-950">ॐ</span>
+            </div>
+            <div className="leading-tight">
+              <span className="font-serif font-bold text-sm sm:text-base tracking-wide bg-gradient-to-r from-amber-200 via-orange-300 to-amber-400 bg-clip-text text-transparent block">
+                Sanatan Dharma
+              </span>
+              <span className="text-[9px] text-amber-400/50 uppercase tracking-widest hidden sm:block font-medium">
+                Vedic Wisdom &amp; Rituals
+              </span>
+            </div>
           </div>
-          <div>
-            <span className="font-serif font-bold text-lg tracking-wider bg-gradient-to-r from-amber-200 via-orange-300 to-amber-400 bg-clip-text text-transparent block leading-tight">
-              Sanatan Dharma
-            </span>
-            <span className="text-[10px] text-amber-400/60 uppercase tracking-widest block font-medium">
-              Vedic Wisdom & Rituals
-            </span>
-          </div>
+
+          {/* Desktop Navigation — hidden on mobile (mobile uses bottom tab bar) */}
+          <nav className="hidden sm:flex gap-1 bg-neutral-900/60 p-1.5 rounded-2xl border border-neutral-800/80 backdrop-blur-md">
+            {[
+              { id: 'home', label: 'Home' },
+              { id: 'panchang', label: 'Panchang' },
+              { id: 'mantras', label: 'Mantras' },
+            ].map(({ id, label }) => (
+              <button
+                key={id}
+                onClick={() => { setPage(id); setSelectedMantra(null); setIsChantMode(false); }}
+                className={`text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer ${
+                  page === id
+                    ? 'text-amber-400 bg-amber-500/15 border border-amber-500/30 shadow-sm'
+                    : 'text-neutral-400 hover:text-amber-300 border border-transparent'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
         </div>
-        
-        {/* Navigation */}
-        <nav className="flex gap-1 bg-neutral-900/60 p-1.5 rounded-2xl border border-neutral-800/80 backdrop-blur-md shadow-lg">
-          <button 
-            onClick={() => { setPage('home'); setSelectedMantra(null); }}
-            className={`text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer ${
-              page === 'home' 
-                ? 'text-amber-400 bg-amber-500/15 border border-amber-500/30 shadow-sm' 
-                : 'text-neutral-400 hover:text-amber-300 border border-transparent'
-            }`}
-          >
-            Home
-          </button>
-          <button 
-            onClick={() => { setPage('panchang'); setSelectedMantra(null); }}
-            className={`text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer ${
-              page === 'panchang' 
-                ? 'text-amber-400 bg-amber-500/15 border border-amber-500/30 shadow-sm' 
-                : 'text-neutral-400 hover:text-amber-300 border border-transparent'
-            }`}
-          >
-            Panchang
-          </button>
-          <button 
-            onClick={() => { setPage('mantras'); setSelectedMantra(null); }}
-            className={`text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer ${
-              page === 'mantras' 
-                ? 'text-amber-400 bg-amber-500/15 border border-amber-500/30 shadow-sm' 
-                : 'text-neutral-400 hover:text-amber-300 border border-transparent'
-            }`}
-          >
-            Mantras
-          </button>
-        </nav>
       </header>
+
+      {/* ===== MOBILE BOTTOM TAB BAR — only on sm screens, hidden in Chant Mode ===== */}
+      {!isChantMode && (
+        <nav className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-neutral-950/95 border-t border-neutral-800/80 backdrop-blur-xl grid grid-cols-3" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+          {[
+            { id: 'home', label: 'Home', icon: '🏠' },
+            { id: 'panchang', label: 'Panchang', icon: '📅' },
+            { id: 'mantras', label: 'Mantras', icon: '📿' },
+          ].map(({ id, label, icon }) => (
+            <button
+              key={id}
+              onClick={() => { setPage(id); setSelectedMantra(null); }}
+              className={`flex flex-col items-center justify-center gap-0.5 py-3 px-2 cursor-pointer transition-all duration-200 ${
+                page === id ? 'text-amber-400' : 'text-neutral-500'
+              }`}
+            >
+              <span className="text-xl leading-none">{icon}</span>
+              <span className={`text-[10px] font-semibold tracking-wider uppercase ${page === id ? 'text-amber-400' : 'text-neutral-500'}`}>
+                {label}
+              </span>
+              {page === id && <span className="w-1 h-1 rounded-full bg-amber-500 mt-0.5" />}
+            </button>
+          ))}
+        </nav>
+      )}
 
       {/* Main View Router */}
       {page === 'home' ? (
-        <main className="container mx-auto px-6 py-12 flex-grow flex flex-col items-center justify-center text-center z-10 max-w-4xl">
+        <main className="container mx-auto px-6 py-12 flex-grow flex flex-col items-center justify-center text-center z-10 max-w-4xl pb-20 sm:pb-0">
           {/* Glow Element around the Symbol */}
           <div className="relative mb-8 group">
             <div className="absolute inset-0 bg-amber-500/20 rounded-full blur-2xl group-hover:bg-amber-500/30 transition-all duration-700 scale-125" />
@@ -471,7 +485,7 @@ function App() {
           </div>
         </main>
       ) : page === 'panchang' ? (
-        <main className="container mx-auto px-6 py-12 flex-grow flex flex-col items-center justify-center z-10 max-w-3xl">
+        <main className="container mx-auto px-6 py-12 flex-grow flex flex-col items-center justify-center z-10 max-w-3xl pb-20 sm:pb-0">
           {/* Page Title */}
           <div className="text-center mb-8">
             <span className="text-xs font-semibold uppercase tracking-widest text-amber-500 bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/20">
@@ -1015,7 +1029,7 @@ function App() {
         /* ========================================================================= */
         /* Day 14: Mantra Library List View with Search, Category Filter & Cards     */
         /* ========================================================================= */
-        <main className="container mx-auto px-4 sm:px-6 py-12 flex-grow flex flex-col items-center justify-start z-10 max-w-5xl">
+        <main className="container mx-auto px-4 sm:px-6 py-12 flex-grow flex flex-col items-center justify-start z-10 max-w-5xl pb-20 sm:pb-0">
           {/* Page Title */}
           <div className="text-center mb-8">
             <span className="text-xs font-semibold uppercase tracking-widest text-amber-500 bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/20">
