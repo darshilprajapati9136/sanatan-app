@@ -374,21 +374,24 @@ function App() {
       )}
 
       {/* ===== HEADER — sticky compact row: logo left, nav right ===== */}
-      <header className="sticky top-0 z-40 w-full bg-neutral-950/90 backdrop-blur-xl border-b border-neutral-900/80 shadow-md">
+      <header className="sticky top-0 z-40 w-full bg-neutral-950/90 backdrop-blur-xl border-b border-neutral-900/80 shadow-md" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center max-w-5xl">
           {/* Logo */}
           <div
             onClick={() => { setPage('home'); setSelectedMantra(null); setIsChantMode(false); }}
-            className="flex items-center gap-2.5 cursor-pointer group"
+            className="flex items-center gap-2.5 cursor-pointer group active:opacity-75"
+            role="button"
+            tabIndex="0"
+            aria-label="Home"
           >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-600 to-orange-500 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300 shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-amber-600 to-orange-500 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300 shrink-0">
               <span className="font-serif text-base font-bold text-neutral-950">ॐ</span>
             </div>
             <div className="leading-tight">
               <span className="font-serif font-bold text-sm sm:text-base tracking-wide bg-gradient-to-r from-amber-200 via-orange-300 to-amber-400 bg-clip-text text-transparent block">
                 Sanatan Dharma
               </span>
-              <span className="text-[9px] text-amber-400/50 uppercase tracking-widest hidden sm:block font-medium">
+              <span className="text-[10px] text-amber-400/50 uppercase tracking-widest hidden sm:block font-medium">
                 Vedic Wisdom &amp; Rituals
               </span>
             </div>
@@ -405,7 +408,7 @@ function App() {
               <button
                 key={id}
                 onClick={() => { setPage(id); setSelectedMantra(null); setIsChantMode(false); }}
-                className={`text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer ${
+                className={`text-xs font-semibold uppercase tracking-wider px-5 py-2.5 rounded-xl transition-all duration-300 cursor-pointer min-h-[44px] flex items-center justify-center ${
                   page === id
                     ? 'text-amber-400 bg-amber-500/15 border border-amber-500/30 shadow-sm'
                     : 'text-neutral-400 hover:text-amber-300 border border-transparent'
@@ -430,7 +433,7 @@ function App() {
             <button
               key={id}
               onClick={() => { setPage(id); setSelectedMantra(null); setIsChantMode(false); }}
-              className={`flex flex-col items-center justify-center gap-0.5 py-3 px-2 cursor-pointer transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center gap-0.5 py-3 px-2 cursor-pointer transition-all duration-200 min-h-[48px] active:opacity-75 ${
                 page === id ? 'text-amber-400' : 'text-neutral-500'
               }`}
             >
@@ -771,7 +774,7 @@ function App() {
               {/* Chant Mode Header */}
               <div className="flex items-center justify-between z-10 border-b border-neutral-850 pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">{selectedMantra.symbol || "🕉️"}</span>
+                  <span className="text-xl" aria-hidden="true">{selectedMantra.symbol || "🕉️"}</span>
                   <div>
                     <h2 className="font-serif text-sm sm:text-base font-bold text-amber-200 line-clamp-1">
                       {selectedMantra.title}
@@ -784,9 +787,10 @@ function App() {
 
                 <button
                   onClick={() => setIsChantMode(false)}
-                  className="px-3.5 py-1.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-amber-400 hover:text-amber-200 border border-neutral-750 text-xs font-semibold cursor-pointer transition flex items-center gap-1.5"
+                  className="px-4 py-2.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-amber-400 hover:text-amber-200 border border-neutral-750 text-xs font-semibold cursor-pointer transition flex items-center gap-1.5 min-h-[44px]"
+                  aria-label="Exit chant mode"
                 >
-                  <span>✕</span> Exit
+                  <span aria-hidden="true">✕</span> Exit
                 </button>
               </div>
 
@@ -831,7 +835,7 @@ function App() {
                 {/* Circular Tap Counter Button */}
                 <button
                   onClick={handleChantTap}
-                  className={`w-36 h-36 sm:w-44 sm:h-44 rounded-full border-4 transition-all duration-150 active:scale-92 cursor-pointer flex flex-col items-center justify-center shadow-2xl select-none group ${
+                  className={`w-40 h-40 sm:w-48 sm:h-48 rounded-full border-4 transition-all duration-150 active:scale-92 cursor-pointer flex flex-col items-center justify-center shadow-2xl select-none group ${
                     japaCount >= japaTarget
                       ? 'border-amber-400 bg-amber-500/25 shadow-amber-500/40 animate-pulse'
                       : 'border-amber-500/50 bg-neutral-900 hover:border-amber-400 hover:bg-neutral-850 active:border-amber-300'
@@ -840,10 +844,10 @@ function App() {
                   <span className="text-3xl sm:text-4xl font-serif font-bold text-amber-100 group-hover:scale-105 transition-transform">
                     {japaCount}
                   </span>
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-amber-400/90 mt-1">
+                  <span className="text-xs font-bold uppercase tracking-widest text-amber-400/90 mt-1">
                     / {japaTarget} Chants
                   </span>
-                  <span className="text-[9px] text-neutral-400 uppercase tracking-wider mt-1 bg-neutral-950/70 px-2 py-0.5 rounded-full border border-neutral-800">
+                  <span className="text-[10px] text-neutral-400 uppercase tracking-wider mt-1 bg-neutral-950/70 px-2 py-0.5 rounded-full border border-neutral-800">
                     Tap to Count
                   </span>
                 </button>
@@ -866,7 +870,8 @@ function App() {
                 <div className="flex items-center justify-between w-full text-xs text-neutral-500 px-2">
                   <button
                     onClick={() => setJapaCount(0)}
-                    className="hover:text-neutral-300 underline cursor-pointer"
+                    className="hover:text-neutral-300 underline cursor-pointer p-1 active:opacity-75"
+                    aria-label="Reset chant counter to zero"
                   >
                     Reset Count
                   </button>
@@ -882,9 +887,10 @@ function App() {
           <div className="w-full flex items-center justify-between mb-8 pb-4 border-b border-neutral-900">
             <button
               onClick={handleBackToLibrary}
-              className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400 hover:text-amber-300 bg-neutral-900/60 hover:bg-neutral-900 px-4 py-2.5 rounded-xl border border-neutral-800 transition-all cursor-pointer shadow-sm"
+              className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400 hover:text-amber-300 bg-neutral-900/60 hover:bg-neutral-900 px-4 py-3 rounded-xl border border-neutral-800 transition-all cursor-pointer shadow-sm min-h-[44px]"
+              aria-label="Back to mantras library"
             >
-              <span>←</span> Back to Mantras
+              <span aria-hidden="true">←</span> Back to Mantras
             </button>
             <div className="flex items-center gap-2">
               <span className="text-xs text-neutral-500 hidden sm:inline">Category:</span>
@@ -909,6 +915,9 @@ function App() {
                       src={selectedMantra.image_url} 
                       alt={selectedMantra.deity || selectedMantra.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      loading="lazy"
+                      width="176"
+                      height="176"
                       onError={(e) => {
                         e.target.style.display = 'none';
                         if (e.target.nextSibling) {
@@ -971,9 +980,10 @@ function App() {
             {/* Prominent CTA to Launch Full-Screen Naam Jap Mode (Crucial for mobile users) */}
             <button
               onClick={() => setIsChantMode(true)}
-              className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-neutral-950 font-bold text-sm sm:text-base flex items-center justify-center gap-3 shadow-xl shadow-orange-950/40 hover:scale-[1.01] active:scale-95 transition-all cursor-pointer"
+              className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-neutral-950 font-bold text-sm sm:text-base flex items-center justify-center gap-3 shadow-xl shadow-orange-950/40 hover:scale-[1.01] active:scale-95 transition-all cursor-pointer min-h-[54px]"
+              aria-label="Open full screen chanting mode for focused meditation"
             >
-              <span className="text-xl">📿</span>
+              <span aria-hidden="true">📿</span>
               <span>Open Naam Jap Mode (Chant & Read Shloka)</span>
               <span className="text-xs opacity-75 font-normal">→</span>
             </button>
@@ -1004,11 +1014,12 @@ function App() {
 
           {/* Floating Mobile Bottom Quick-Chant Bar */}
           {!isChantMode && (
-            <div className="fixed bottom-0 left-0 right-0 p-3.5 bg-neutral-950/95 border-t border-neutral-800/80 backdrop-blur-xl flex items-center justify-between sm:hidden z-30 px-5 shadow-2xl">
+            <div className="fixed bottom-0 left-0 right-0 p-3.5 bg-neutral-950/95 border-t border-neutral-800/80 backdrop-blur-xl flex items-center justify-between sm:hidden z-30 px-5 shadow-2xl" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
               <div className="flex items-center gap-2.5">
                 <button
                   onClick={handleChantTap}
-                  className="w-10 h-10 rounded-full bg-amber-500 text-neutral-950 font-bold text-sm flex items-center justify-center shadow-lg active:scale-90 transition-transform cursor-pointer"
+                  className="w-12 h-12 rounded-full bg-amber-500 text-neutral-950 font-bold text-sm flex items-center justify-center shadow-lg active:scale-90 transition-transform cursor-pointer"
+                  aria-label="Increment chant count by 1"
                 >
                   +1
                 </button>
@@ -1022,9 +1033,10 @@ function App() {
 
               <button
                 onClick={() => setIsChantMode(true)}
-                className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-neutral-950 font-bold text-xs rounded-xl shadow-md cursor-pointer flex items-center gap-1.5"
+                className="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-neutral-950 font-bold text-xs rounded-xl shadow-md cursor-pointer flex items-center gap-1.5 min-h-[44px]"
+                aria-label="Open full screen chanting mode"
               >
-                <span>📿</span> Focus Chant
+                <span aria-hidden="true">📿</span> Focus
               </button>
             </div>
           )}
@@ -1051,18 +1063,20 @@ function App() {
           <div className="w-full max-w-3xl space-y-4 mb-8">
             {/* Search Input */}
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 text-base">🔍</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 text-base" aria-hidden="true">🔍</span>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by mantra title, deity (e.g. Shiva, Gayatri, Ganesha), or meaning..."
-                className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-neutral-900/70 border border-neutral-800 text-amber-100 placeholder-neutral-500 focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/60 transition-all text-sm backdrop-blur-md"
+                className="w-full pl-11 pr-10 py-3 rounded-2xl bg-neutral-900/70 border border-neutral-800 text-amber-100 placeholder-neutral-500 focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/60 transition-all text-sm backdrop-blur-md min-h-[44px]"
+                aria-label="Search mantras"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-neutral-500 hover:text-amber-400 cursor-pointer"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-neutral-500 hover:text-amber-400 cursor-pointer p-1.5 active:opacity-75"
+                  aria-label="Clear search"
                 >
                   ✕
                 </button>
@@ -1079,7 +1093,7 @@ function App() {
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`text-xs font-semibold px-4 py-2 rounded-xl border transition-all duration-300 cursor-pointer flex items-center gap-1.5 ${
+                    className={`text-xs font-semibold px-4 py-2.5 rounded-xl border transition-all duration-300 cursor-pointer flex items-center gap-1.5 min-h-[44px] active:scale-95 ${
                       selectedCategory === cat
                         ? 'text-neutral-950 bg-gradient-to-r from-amber-400 to-orange-400 border-transparent shadow-md shadow-amber-950/40 font-bold'
                         : 'text-neutral-400 bg-neutral-900/50 border-neutral-850 hover:text-amber-200 hover:border-neutral-700'
@@ -1131,11 +1145,12 @@ function App() {
                     <button
                       onClick={seedDatabase}
                       disabled={seeding}
-                      className="px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-500 hover:to-orange-400 text-neutral-950 font-semibold rounded-xl transition disabled:opacity-50 cursor-pointer shadow-lg shadow-orange-950/20 text-xs"
+                      className="px-6 py-3.5 bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-500 hover:to-orange-400 text-neutral-950 font-semibold rounded-xl transition disabled:opacity-50 cursor-pointer shadow-lg shadow-orange-950/20 text-xs min-h-[44px]"
+                      aria-label="Seed database with sample Vedic mantras"
                     >
                       {seeding ? "Seeding database..." : "✨ Seed Sample Mantras to Supabase"}
                     </button>
-                  )}
+                  )}}
                 </div>
               ) : (
                 /* Cards Grid */
@@ -1144,7 +1159,11 @@ function App() {
                     <div
                       key={mantra.id || mantra.title}
                       onClick={() => handleOpenDetail(mantra)}
-                      className="p-6 rounded-3xl bg-neutral-900/40 border border-neutral-850 hover:border-amber-500/40 transition-all duration-300 backdrop-blur-sm flex flex-col justify-between group relative overflow-hidden cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-950/20"
+                      className="p-6 rounded-3xl bg-neutral-900/40 border border-neutral-850 hover:border-amber-500/40 transition-all duration-300 backdrop-blur-sm flex flex-col justify-between group relative overflow-hidden cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-950/20 active:opacity-75"
+                      role="button"
+                      tabIndex="0"
+                      aria-label={`View ${mantra.title} mantra`}
+                      onKeyDown={(e) => e.key === 'Enter' && handleOpenDetail(mantra)}
                     >
                       {/* Ambient hover glow */}
                       <div className="absolute top-0 right-0 w-28 h-28 bg-amber-500/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -1190,11 +1209,11 @@ function App() {
 
                       {/* Card Footer Action */}
                       <div className="pt-5 mt-4 border-t border-neutral-850/80 flex items-center justify-between text-xs">
-                        <span className="text-neutral-500 group-hover:text-neutral-400 text-[11px]">
+                        <span className="text-neutral-500 group-hover:text-neutral-400 text-[11px]" aria-hidden="true">
                           📿 108 Japa Chanting
                         </span>
                         <span className="font-bold text-amber-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
-                          Read Shloka <span>→</span>
+                          Read Shloka <span aria-hidden="true">→</span>
                         </span>
                       </div>
                     </div>
@@ -1206,10 +1225,10 @@ function App() {
         </main>
       )}
 
-      {/* Footer */}
-      <footer className="container mx-auto px-6 py-8 border-t border-neutral-900/60 z-10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-neutral-500 mt-12">
+      {/* Footer - Hidden on mobile to prevent duplicate navigation with bottom tab bar */}
+      <footer className="container mx-auto px-6 py-8 border-t border-neutral-900/60 z-10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-neutral-500 mt-12 hidden sm:flex">
         <div className="flex items-center gap-2">
-          <span className="text-amber-500">ॐ</span>
+          <span className="text-amber-500" aria-hidden="true">ॐ</span>
           <p>© 2026 Sanatan Dharma App. All spiritual rights reserved.</p>
         </div>
         <div className="flex gap-6">
