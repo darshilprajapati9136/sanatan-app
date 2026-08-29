@@ -357,18 +357,18 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-amber-50 font-sans flex flex-col justify-between overflow-x-hidden relative selection:bg-amber-500/30 selection:text-amber-200">
-      {/* Decorative Golden Ambient Glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[550px] pointer-events-none overflow-hidden opacity-30">
-        <div className="absolute -top-[200px] left-1/2 -translate-x-1/2 w-[650px] h-[650px] rounded-full bg-amber-600/20 blur-[130px]" />
-        <div className="absolute -top-[100px] left-1/4 w-[350px] h-[350px] rounded-full bg-orange-600/10 blur-[90px]" />
-        <div className="absolute top-[200px] right-1/4 w-[250px] h-[250px] rounded-full bg-amber-500/10 blur-[80px]" />
+    <div className="min-h-screen bg-neutral-950 text-amber-50 font-sans flex flex-col justify-between overflow-x-hidden relative selection:bg-amber-500/30 selection:text-amber-200" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+      {/* Decorative Golden Ambient Glows - Optimized for mobile performance */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[550px] pointer-events-none overflow-hidden opacity-20 hidden md:block">
+        <div className="absolute -top-[200px] left-1/2 -translate-x-1/2 w-[650px] h-[650px] rounded-full bg-amber-600/20 blur-[80px]" />
+        <div className="absolute -top-[100px] left-1/4 w-[350px] h-[350px] rounded-full bg-orange-600/10 blur-[60px]" />
+        <div className="absolute top-[200px] right-1/4 w-[250px] h-[250px] rounded-full bg-amber-500/10 blur-[50px]" />
       </div>
 
-      {/* Floating Toast Notification */}
+      {/* Floating Toast Notification - Mobile safe area adjusted */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-neutral-900/95 border border-amber-500/40 text-amber-300 px-5 py-3.5 rounded-2xl shadow-2xl backdrop-blur-md animate-bounce">
-          <span className="text-lg">🕉️</span>
+        <div className="fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 z-50 flex items-center gap-3 bg-neutral-900/95 border border-amber-500/40 text-amber-300 px-5 py-3.5 rounded-2xl shadow-2xl backdrop-blur-md animate-bounce" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+          <span className="text-lg flex-shrink-0" aria-hidden="true">🕉️</span>
           <span className="text-xs sm:text-sm font-medium">{toastMessage}</span>
         </div>
       )}
@@ -703,8 +703,8 @@ function App() {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-8 justify-center">
-            {[1, 2, 3].map(ch => (
+              <div className="flex flex-wrap gap-2 mb-8 justify-center">
+                {[1].map(ch => (
               <button
                 key={ch}
                 onClick={() => { setSelectedChapter(ch); setGitaVerses([]); }}
