@@ -136,7 +136,7 @@ const SAMPLE_MANTRAS = [
 ];
 
 function App() {
-  const [page, setPage] = useState('home'); // 'home' | 'panchang' | 'mantras'
+  const [page, setPage] = useState('home'); // 'home' | 'panchang' | 'mantras' | 'gita'
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -154,6 +154,11 @@ function App() {
   const [japaTarget, setJapaTarget] = useState(108);
   const [isChantMode, setIsChantMode] = useState(false); // Mobile Full-Screen Focus Chant Mode
   const [toastMessage, setToastMessage] = useState(null);
+
+  // Gita state
+  const [gitaVerses, setGitaVerses] = useState([]);
+  const [loadingGita, setLoadingGita] = useState(true);
+  const [selectedChapter, setSelectedChapter] = useState(1);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -196,6 +201,30 @@ function App() {
     if (page !== 'mantras') return;
     fetchMantrasList();
   }, [page]);
+
+  // Fetch Gita verses when page switches to 'gita'
+  useEffect(() => {
+    if (page !== 'gita') return;
+    fetchGitaChapter(selectedChapter);
+  }, [page, selectedChapter]);
+
+  async function fetchGitaChapter(chapterNum) {
+    setLoadingGita(true);
+    try {
+      const { data, error } = await supabase
+        .from('gita_verses')
+        .select('*')
+        .eq('chapter', chapterNum)
+        .order('verse', { ascending: true });
+
+      if (error) throw error;
+      setGitaVerses(data || []);
+    } catch (err) {
+      console.error('Error fetching Gita verses:', err);
+    } finally {
+      setLoadingGita(false);
+    }
+  }
 
   async function fetchMantrasList() {
     setLoadingMantras(true);
@@ -371,6 +400,7 @@ function App() {
               { id: 'home', label: 'Home' },
               { id: 'panchang', label: 'Panchang' },
               { id: 'mantras', label: 'Mantras' },
+              { id: 'gita', label: 'Gita' },
             ].map(({ id, label }) => (
               <button
                 key={id}
@@ -390,15 +420,16 @@ function App() {
 
       {/* ===== MOBILE BOTTOM TAB BAR — only on sm screens, hidden in Chant Mode ===== */}
       {!isChantMode && (
-        <nav className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-neutral-950/95 border-t border-neutral-800/80 backdrop-blur-xl grid grid-cols-3" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        <nav className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-neutral-950/95 border-t border-neutral-800/80 backdrop-blur-xl grid grid-cols-4" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
           {[
             { id: 'home', label: 'Home', icon: '🏠' },
             { id: 'panchang', label: 'Panchang', icon: '📅' },
             { id: 'mantras', label: 'Mantras', icon: '📿' },
+            { id: 'gita', label: 'Gita', icon: '📖' },
           ].map(({ id, label, icon }) => (
             <button
               key={id}
-              onClick={() => { setPage(id); setSelectedMantra(null); }}
+              onClick={() => { setPage(id); setSelectedMantra(null); setIsChantMode(false); }}
               className={`flex flex-col items-center justify-center gap-0.5 py-3 px-2 cursor-pointer transition-all duration-200 ${
                 page === id ? 'text-amber-400' : 'text-neutral-500'
               }`}
@@ -655,6 +686,72 @@ function App() {
           ) : (
             <div className="p-8 rounded-2xl bg-neutral-900 border border-neutral-800 text-center text-amber-400">
               ⚠️ Failed to load Panchang calculations.
+            </div>
+          )}
+        </main>
+      ) : page === 'gita' ? (
+        <main className="container mx-auto px-4 sm:px-6 py-12 flex-grow flex flex-col items-center z-10 max-w-3xl pb-24 sm:pb-8">
+          <div className="text-center mb-8">
+            <span className="text-xs font-semibold uppercase tracking-widest text-amber-500 bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/20">
+              Sacred Scripture
+            </span>
+            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-wide mt-3 mb-2 bg-gradient-to-r from-amber-100 to-orange-300 bg-clip-text text-transparent">
+              Bhagavad Gita
+            </h1>
+            <p className="text-neutral-400 text-sm max-w-lg">
+              Chapter {selectedChapter} — Verse by verse with Sanskrit, transliteration, and meaning.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2 mb-8 justify-center">
+            {[1, 2, 3].map(ch => (
+              <button
+                key={ch}
+                onClick={() => { setSelectedChapter(ch); setGitaVerses([]); }}
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition cursor-pointer ${
+                  selectedChapter === ch
+                    ? 'bg-amber-500 text-neutral-950'
+                    : 'bg-neutral-900 text-neutral-400 hover:text-amber-300 border border-neutral-800'
+                }`}
+              >
+                Chapter {ch}
+              </button>
+            ))}
+          </div>
+
+          {loadingGita ? (
+            <div className="text-center text-neutral-500 py-20">Loading verses...</div>
+          ) : gitaVerses.length === 0 ? (
+            <div className="text-center text-neutral-500 py-20">No verses found for this chapter.</div>
+          ) : (
+            <div className="w-full space-y-6">
+              {gitaVerses.map((verse) => (
+                <div
+                  key={verse.id}
+                  className="p-6 sm:p-8 rounded-3xl bg-neutral-900/40 border border-neutral-850 backdrop-blur-sm"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="text-xs font-bold uppercase tracking-widest text-amber-500 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                      Ch.{verse.chapter} Verse {verse.verse}
+                    </span>
+                  </div>
+
+                  <p className="font-serif text-xl sm:text-2xl font-bold text-amber-100 leading-relaxed mb-4">
+                    {verse.sanskrit_text}
+                  </p>
+
+                  <p className="text-sm sm:text-base text-neutral-300 italic font-light leading-relaxed mb-4">
+                    {verse.transliteration}
+                  </p>
+
+                  <div className="border-t border-neutral-800 pt-4">
+                    <p className="text-xs font-bold uppercase tracking-widest text-amber-400/90 mb-2">Meaning</p>
+                    <p className="text-sm sm:text-base text-neutral-300 leading-relaxed font-light">
+                      {verse.meaning}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </main>
@@ -1118,7 +1215,8 @@ function App() {
         <div className="flex gap-6">
           <button onClick={() => { setPage('home'); setSelectedMantra(null); }} className="hover:text-amber-500 transition-colors cursor-pointer">Home</button>
           <button onClick={() => { setPage('panchang'); setSelectedMantra(null); }} className="hover:text-amber-500 transition-colors cursor-pointer">Panchang</button>
-          <button onClick={() => { setPage('mantras'); setSelectedMantra(null); }} className="hover:text-amber-500 transition-colors cursor-pointer">Mantra Library</button>
+          <button onClick={() => { setPage('mantras'); setSelectedMantra(null); setIsChantMode(false); }} className="hover:text-amber-500 transition-colors cursor-pointer">Mantra Library</button>
+          <button onClick={() => { setPage('gita'); setSelectedMantra(null); setIsChantMode(false); }} className="hover:text-amber-500 transition-colors cursor-pointer">Bhagavad Gita</button>
         </div>
       </footer>
     </div>
